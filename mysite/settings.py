@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -77,16 +77,35 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': os.environ.get('DATABASE_PORT'),
+if 'test' in sys.argv:
+    #Configuration for test database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd8ddtkhe5bbga2',
+            'USER': 'stsiasvzeorxox',
+            'PASSWORD': '96c442683c4277f2c1b7a5fedd93eb165c0b446d1fe4a45d4e865a4561e7895f',
+            'HOST': 'ec2-34-238-37-113.compute-1.amazonaws.com',
+            'PORT': 5432,
+            'TEST': {
+                'NAME': 'd8ddtkhe5bbga2', #This is an important entry
+            }
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
+            'PORT': os.environ.get('DATABASE_PORT'),
+            'TEST': {
+                    'NAME': os.environ.get('DATABASE_NAME'),
+                }
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
